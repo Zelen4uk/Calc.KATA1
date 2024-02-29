@@ -8,46 +8,37 @@ public class Main {
         System.out.println();
         try {
             System.out.println(Main.calc(input));
-        } catch (ArrayIndexOutOfBoundsException e1){
-            System.out.println("throws Exception");
-            System.exit(0);
+        } catch (Exception e) {
+            System.out.println("Output:");
+            e.printStackTrace();
         }
     }
-    public static String calc(String input) {
+    public static String calc(String input) throws Exception {
 
         String[] str = input.split(" ", 3); // разбивает строку на массив с разделителем "пробел" и ограничивает длинну массива.
 
-        String output = null;
+        String output;
 
         String arithmetic_sign = str[1];
-        try {
+
             switch (arithmetic_sign) {
                 case "+", "-", "/", "*":
                     break;
                 default:
                     throw new IOException();
             }
-        } catch (IOException e){
-            System.out.println("throws Exception");
-            System.exit(0);
-        }
 
         Scanner scan_a = new Scanner(str[0]);
         Scanner scan_b = new Scanner(str[2]);
         if (scan_a.hasNextInt() & scan_b.hasNextInt()) {
-           ArabicNumerals numerals = new ArabicNumerals(str[0],str[2],str[1]);
+            ArabicNumerals numerals = new ArabicNumerals(str[0],str[2],str[1]);
             output = numerals.getOutput();
         } else {
-            try {
                 Roman romanA = Roman.valueOf(str[0]); //valueOf(str[0]) - метод возвращает строковое представление переданного аргумента.
                 Roman romanB = Roman.valueOf(str[2]);
-            RomansNumerals numerals = new RomansNumerals(romanA.getNumber(), romanB.getNumber(), arithmetic_sign);
-            Conversion conversion = new Conversion(numerals.getNumbers());
-            output = conversion.getConversion();
-            } catch (IllegalArgumentException e) {
-                System.out.println("throws Exception");
-                System.exit(0);
-            }
+                RomansNumerals numerals = new RomansNumerals(romanA.getNumber(), romanB.getNumber(), arithmetic_sign);
+                Conversion conversion = new Conversion(numerals.getNumbers());
+                output = conversion.getConversion();
         }
         System.out.println("Output:");
         return output;
@@ -59,30 +50,22 @@ class ArabicNumerals{
     int number2;
     String arithmetic_sign;
     String output;
-    public ArabicNumerals(String number1, String number2, String arithmetic_sign){
-        try {
+    public ArabicNumerals(String number1, String number2, String arithmetic_sign) throws NumberFormatException{
+
             this.number1 = Integer.parseInt(number1);
             this.number2 = Integer.parseInt(number2);
             this.arithmetic_sign = arithmetic_sign;
-        } catch (NumberFormatException e){
-            System.out.println("throws Exception");
-            System.exit(0);
-        }
     }
-    public String getOutput() {
-       try {
-           if (number1 > 0 & number2 > 0) {
-               if (number1 < 11 & number2 < 11) {
-               } else {
-                   throw new IOException();
-               }
-           } else {
-               throw new IOException();
-           }
-       } catch ( IOException e) {
-           System.out.println("throws Exception");
-           System.exit(0);
-       }
+    public String getOutput() throws IOException {
+            if (number1 > 0 & number2 > 0) {
+                if (number1 < 11 & number2 < 11) {
+                } else {
+                    throw new IOException();
+                }
+            } else {
+                throw new IOException();
+            }
+
         switch (arithmetic_sign){
             case "+":
                 output = String.valueOf(number1 + number2);
@@ -135,18 +118,13 @@ class Conversion {
     public Conversion (int input){
         this.input = input;
     }
-    public String getConversion () {
-
-        try {
+    public String getConversion () throws IOException {
 
             if (input > 0) {
             } else {
                 throw new IOException();
             }
-        } catch (IOException e) {
-            System.out.println("throws Exception");
-            System.exit(0);
-        }
+
         int units = input % 10;
         int tens = (input % 100) / 10;
         int hundreds = (input % 1000) / 100;
@@ -228,7 +206,7 @@ enum Roman {
     VI(6), VII(7), VIII(8), IX(9), X(10);
     private final int number;
 
-    Roman(int number){
+    Roman(int number) throws IllegalArgumentException{
         this.number = number;
     }
 
